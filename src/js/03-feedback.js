@@ -10,18 +10,21 @@ const refs = {
 refs.form.addEventListener('submit', onFormSubmit);
 refs.form.addEventListener('input', throttle(onFormInput, 500));
 
-refs.form.addEventListener('input', evt => {
-    formData[evt.target.name] = evt.target.value;
-    console.log(formData);
-
-});
 
 populateForm();
 
 function onFormSubmit(evt) {
     evt.preventDefault();
+    if (!evt.target.email.value || !evt.target.message.value) {
+        alert('Please, enter all fields');
+        return;
+    }
+
     evt.currentTarget.reset();
     localStorage.removeItem(STORAGE_KEY);
+    console.log(formData);
+    formData = {};
+   
 };
 
 function onFormInput(evt) {
@@ -34,11 +37,9 @@ function onFormInput(evt) {
 function populateForm() {
     const saveForm = localStorage.getItem(STORAGE_KEY);
     const parseForm = JSON.parse(saveForm);
-    if (parseForm.email) {
-        refs.form.email.value = parseForm.email;
-    }
-    if (parseForm.message) {
-        refs.form.message.value = parseForm.message;
+    if (parseForm) {
+        refs.form.email.value = parseForm.email || '';
+        refs.form.message.value = parseForm.message || '';
     }
         
 }
