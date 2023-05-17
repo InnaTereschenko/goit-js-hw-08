@@ -8,7 +8,7 @@ const refs = {
 }
 
 refs.form.addEventListener('submit', onFormSubmit);
-refs.textarea.addEventListener('input', throttle(onFormInput, 500));
+refs.form.addEventListener('input', throttle(onFormInput, 500));
 
 refs.form.addEventListener('input', evt => {
     formData[evt.target.name] = evt.target.value;

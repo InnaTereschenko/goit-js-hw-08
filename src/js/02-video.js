@@ -3,13 +3,21 @@ import Player from '@vimeo/player';
 import throttle from 'lodash.throttle';
 
 const iframe = document.querySelector('iframe');
+const STORAGE_KEY = 'videoplayer-current-time';
+
 const player = new Player(iframe);
 
-player.on('timeupdate', throttle(evt => {
-    localStorage.setItem('videoplayer-current-time', JSON.stringify(evt));
-}, 1000));
+const getCurrentTime = function (curentTime) {
+    let seconds = curentTime.seconds;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(seconds));
+};
+    
+player.on('timeupdate', throttle(getCurrentTime), 1000);
 
-player.setCurrentTime(localStorage.getItem('videoplayer-current-time'))
-.catch(function(error) {
-    console.log('Error', error);
-});
+
+    const getFixTime = localStorage.getItem(STORAGE_KEY) || 0;
+    
+    player.setCurrentTime(getFixTime);
+
+    
+
